@@ -17,8 +17,9 @@ const HTTPS_CONFIG = {
 
 export default class HttpServer {
     private readonly server;
+    public static instance: HttpServer;
 
-    public constructor() {
+    private constructor() {
         this.server = express();
         this.server.use(express.json()); 
         this.server.route('/*').all((req, res) => {
@@ -38,5 +39,12 @@ export default class HttpServer {
         this.server.listen(80, Config.HTTP.HTTP_HOST, () => {
             c.log(`Listening on ${Config.HTTP.HTTP_HOST}:${Config.HTTP.HTTP_PORT}`);
         });
+    }
+
+    public static getInstance(): HttpServer {
+        if (!HttpServer.instance) {
+            HttpServer.instance = new HttpServer();
+        }
+        return HttpServer.instance;
     }
 }

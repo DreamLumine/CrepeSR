@@ -10,4 +10,4 @@ const c = new Logger("CrepeSR");
 
 c.log(`Starting CrepeSR...`);
 Interface.start();
-const http = new HttpServer();
+HttpServer.getInstance();
