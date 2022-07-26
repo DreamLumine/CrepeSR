@@ -1,0 +1,38 @@
+// Copyright (C) 2022 CrepeSR
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+syntax = "proto3";
+
+message QueryCurrRegionHttpRsp {
+  uint32 retcode = 1; // Always present
+  string msg = 2; // Always present
+  string region_name = 3; // Always present
+  string gateserver_ip = 4;
+  uint32 gateserver_port = 5;
+  int64 stop_begin_time = 6;
+  int64 stop_end_time = 7;
+  bool unknown_boolean_one = 8;
+  bool unknown_boolean_two = 9;
+  string resource_url = 10;
+  string data_url = 11;
+  string lua_url = 12;
+  uint32 unknown_int_one = 15;
+  string client_secret_key = 17;
+  string region_config = 18;
+  string feedback_url = 20;
+  string beta_text = 24; // "当前版本为测试版本，不代表游戏最终品质"
+  bool unknown_boolean_three = 25;
+  bool unknown_boolean_four = 26;
+}
