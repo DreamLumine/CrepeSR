@@ -78,4 +78,8 @@ export default class Session {
         this.c.debug(`send ${packet.rawData.toString('hex')}`);
         this.kcpobj.send(packet.rawData);
     }
+
+    public sendRaw(data: Buffer) {
+        this.kcpobj.send(data);
+    }
 }

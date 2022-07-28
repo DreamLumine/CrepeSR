@@ -19,13 +19,13 @@ export default class Packet {
     public readonly data: Buffer;
     public body: {} = {};
 
-    public constructor(public readonly rawData: Buffer, public readonly protoName = "") {
+    public constructor(public readonly rawData: Buffer, public readonly protoName: string = "") {
         // Remove the header and metadata
         const metadataLength = rawData.readUInt16BE(6);
         this.data = rawData.subarray(12 + metadataLength, 12 + metadataLength + rawData.readUInt32BE(8));
         this.cmdid = this.rawData.readUInt16BE(4);
 
-        this.protoName = packetIds[this.cmdid.toString()];
+        this.protoName = this.protoName || packetIds[this.cmdid.toString()];
         if (this.protoName) {
             try {
                 const root = protobuf.loadSync(resolve(__dirname, `../../data/proto/${this.protoName}.proto`));
@@ -49,7 +49,7 @@ export default class Packet {
         return str.startsWith("01234567") && str.endsWith("89abcdef");
     }
 
-    public static encode(name: string, body: {}): Packet | null {
+    public static encode(name: string, body: {}, customCmdId?: number): Packet | null {
         try {
             const cmdid = switchedPacketIds[name];
             const root = protobuf.loadSync(resolve(__dirname, `../../data/proto/${name}.proto`));
@@ -58,13 +58,13 @@ export default class Packet {
             const data = Buffer.from(Message.encode(body).finish());
             const packet = Buffer.allocUnsafe(16 + data.length);
             packet.writeUInt32BE(0x1234567);
-            packet.writeUint16BE(cmdid, 4);
+            packet.writeUint16BE(customCmdId || cmdid, 4);
             packet.writeUint16BE(0, 6);
             packet.writeUint32BE(data.length, 8);
             data.copy(packet, 12);
             packet.writeUint32BE(0x89abcdef, 12 + data.length);
 
-            return new Packet(packet);
+            return new Packet(packet, name);
         } catch (e) {
             c.error(e as Error);
             return null;

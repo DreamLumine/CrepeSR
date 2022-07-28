@@ -17,14 +17,14 @@ export default async function handle(session: Session, packet: Packet) {
         c.error(`Account not found: ${body.accountUid}`);
         return;
     }
-    
+
     const isTokenValid = account.token === body.accountToken;
     if (!isTokenValid) {
         c.error(`Token invalid (${session.ctx.address}:${session.ctx.port})`);
         return;
     }
 
-    session.send('PlayerGetTokenScRsp', {
+    session.send("PlayerGetTokenScRsp", {
         uid: account.uid,
         token: body.accountToken,
         secretKey: BigInt(0).toString(),
