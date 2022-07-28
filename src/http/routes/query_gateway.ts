@@ -3,7 +3,7 @@ import protobuf from 'protobufjs';
 import { resolve } from 'path';
 import Config from "../../util/Config";
 
-const proto = protobuf.loadSync(resolve(__dirname, '../../proto/QueryCurrRegionHttpRsp.proto')).lookup('QueryCurrRegionHttpRsp') as any;
+const proto = protobuf.loadSync(resolve(__dirname, '../../data/proto/QueryCurrRegionHttpRsp.proto')).lookup('QueryCurrRegionHttpRsp') as any;
 
 export default function handle(req: Request, res: Response) {
     const dataObj = {

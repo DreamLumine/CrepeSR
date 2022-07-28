@@ -12,7 +12,7 @@ type Color = 'red' | 'green' | 'yellow' | 'blue' | 'magenta' | 'cyan' | 'white' 
 export default class Logger {
     public static VERBOSE_LEVEL: VerboseLevel = Config.VERBOSE_LEVEL || 1;
 
-    constructor(public name: string, public color: Color = 'cyan') {
+    constructor(public name: string, public color: Color = 'blue') {
         this.name = name;
         this.color = color;
     }
@@ -34,10 +34,10 @@ export default class Logger {
         console.log(`\t↳ ${args.join(' ').gray}`);
     }
 
-    public error(e: Error | string) {
+    public error(e: Error | string, stack: boolean = true) {
         if (typeof e === 'string') e = new Error(e);
         console.log(`[${this.getDate().white.bold}] ${`ERROR<${this.name}>`.bgRed.bold}`, e.message);
-        if (e.stack) this.trail(e.stack);
+        if (e.stack && stack) this.trail(e.stack);
     }
 
     public warn(...args: string[]) {

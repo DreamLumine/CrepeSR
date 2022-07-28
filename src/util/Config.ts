@@ -23,7 +23,7 @@ const DEFAULT_CONFIG = {
 
     // GameServer
     GAMESERVER: {
-        SERVER_IP: "0.0.0.0",
+        SERVER_IP: "127.0.0.1",
         SERVER_PORT: 22102,
         MAINTENANCE: false,
         MAINTENANCE_MSG: "Server is in maintenance mode."

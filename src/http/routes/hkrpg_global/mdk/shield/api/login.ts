@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Account from "../../../../../../db/Account";
 import Logger from "../../../../../../util/Logger";
+const c = new Logger("Dispatch");
 
 // Example request:
 // {
@@ -10,7 +11,6 @@ import Logger from "../../../../../../util/Logger";
 // }
 
 export default async function handle(req: Request, res: Response) {
-    const c = new Logger(req.ip);
     const acc = await Account.getAccountByUsername(req.body.account);
     const dataObj: any = {
         retcode: 0,
@@ -22,11 +22,11 @@ export default async function handle(req: Request, res: Response) {
     if (!acc) {
         dataObj.retcode = -202;
         dataObj.message = "Account not found";
-        c.warn(`[DISPATCH] Player ${req.body.account} not found`);
+        c.warn(`Player ${req.body.account} not found (${req.ip})`);
         res.send(dataObj);
     } else {
         dataObj.data.account = acc;
-        c.log(`[DISPATCH] Player ${req.body.account} logged in`);
+        c.log(`Player ${req.body.account} logged in (${req.ip})`);
         res.send(dataObj);
     }
 }

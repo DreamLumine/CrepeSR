@@ -5,9 +5,11 @@
  */
 import Interface from "./commands/Interface";
 import HttpServer from "./http/HttpServer";
+import SRServer from "./server/kcp/SRServer";
 import Logger from "./util/Logger";
 const c = new Logger("CrepeSR");
 
 c.log(`Starting CrepeSR...`);
 Interface.start();
-HttpServer.getInstance();
+HttpServer.getInstance().start();
+SRServer.getInstance().start();

@@ -4,7 +4,7 @@ import Logger from "../util/Logger";
 const c = new Logger("Database");
 
 export default class Database {
-    public static instance: Database;
+    private static instance: Database;
     public static client: MongoClient;
     private constructor() {
         Database.client = new MongoClient(Config.MONGO_URI);
