@@ -4,13 +4,13 @@ import { resolve } from 'path';
 import _packetIds from '../../data/packetIds.json';
 
 
-export type PacketTypes = keyof typeof _packetIds;
-const switchedPacketIds = _packetIds as { [key in PacketTypes]: string };
-const packetIds: { [key: string]: PacketTypes } = (function () {
-    const obj: { [key: string]: PacketTypes } = {};
+export type PacketType = keyof typeof _packetIds;
+const switchedPacketIds = _packetIds as { [key in PacketType]: string };
+const packetIds: { [key: string]: PacketType } = (function () {
+    const obj: { [key: string]: PacketType } = {};
 
     Object.keys(switchedPacketIds).forEach((key) => {
-        obj[switchedPacketIds[key as PacketTypes]] = key as PacketTypes;
+        obj[switchedPacketIds[key as PacketType]] = key as PacketType;
     });
 
     return obj;
@@ -54,9 +54,9 @@ export default class Packet {
         return str.startsWith("01234567") && str.endsWith("89abcdef");
     }
 
-    public static encode(name: string, body: {}, customCmdId?: number): Packet | null {
+    public static encode(name: PacketType, body: {}, customCmdId?: number): Packet | null {
         try {
-            const cmdid = switchedPacketIds[name];
+            const cmdid = Number(switchedPacketIds[name]);
             const root = protobuf.loadSync(resolve(__dirname, `../../data/proto/${name}.proto`));
             const Message = root.lookupTypeOrEnum(name);
 
