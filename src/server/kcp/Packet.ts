@@ -16,9 +16,6 @@ const packetIds: { [key: string]: PacketType } = (function () {
     return obj;
 })();
 
-
-
-console.log(packetIds.PlayerGetTokenReq)
 const c = new Logger("Packet")
 
 export default class Packet {
