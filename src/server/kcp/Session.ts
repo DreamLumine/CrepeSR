@@ -3,7 +3,7 @@ import { RemoteInfo } from 'dgram';
 import { resolve } from 'path';
 import fs from 'fs';
 import KCP from 'node-kcp-token';
-import Packet from './Packet';
+import Packet, { PacketType } from './Packet';
 import Logger, { VerboseLevel } from '../../util/Logger';
 import defaultHandler from '../packets/PacketHandler';
 
@@ -71,7 +71,7 @@ export default class Session {
         });
     }
 
-    public send(name: string, body: {}) {
+    public send(name: PacketType, body: {}) {
         const packet = Packet.encode(name, body);
         if (!packet) return;
         if (Logger.VERBOSE_LEVEL >= VerboseLevel.WARNS) this.c.log(packet.protoName);

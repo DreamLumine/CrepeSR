@@ -17,6 +17,8 @@ const packetIds: { [key: string]: PacketType } = (function () {
 })();
 
 
+
+console.log(packetIds.PlayerGetTokenReq)
 const c = new Logger("Packet")
 
 export default class Packet {
@@ -30,6 +32,7 @@ export default class Packet {
         this.data = rawData.subarray(12 + metadataLength, 12 + metadataLength + rawData.readUInt32BE(8));
         this.cmdid = this.rawData.readUInt16BE(4);
 
+        
         this.protoName = this.protoName || packetIds[this.cmdid.toString()];
         if (this.protoName) {
             try {
