@@ -2,16 +2,21 @@ import Logger, { VerboseLevel } from "../../util/Logger";
 import protobuf from 'protobufjs';
 import { resolve } from 'path';
 import _packetIds from '../../data/packetIds.json';
-const packetIds = _packetIds as { [key: string]: string };
-const switchedPacketIds: { [key: string]: number } = (function () {
-    const obj: { [key: string]: number } = {};
 
-    Object.keys(packetIds).forEach((key) => {
-        obj[packetIds[key]] = Number(key);
+
+export type PacketTypes = keyof typeof _packetIds;
+const switchedPacketIds = _packetIds as { [key in PacketTypes]: string };
+const packetIds: { [key: string]: PacketTypes } = (function () {
+    const obj: { [key: string]: PacketTypes } = {};
+
+    Object.keys(switchedPacketIds).forEach((key) => {
+        obj[switchedPacketIds[key as PacketTypes]] = key as PacketTypes;
     });
 
     return obj;
 })();
+
+
 const c = new Logger("Packet")
 
 export default class Packet {

@@ -1,6 +1,6 @@
 {
-    "101": "DebugNotify",
-    "5": "PlayerGetTokenCsReq",
-    "48": "PlayerGetTokenScRsp",
-    "22": "PlayerKeepAliveNotify"
+    "DebugNotify": "101",
+    "PlayerGetTokenCsReq": "5",
+    "PlayerGetTokenScRsp": "48",
+    "PlayerKeepAliveNotify": "22"
 }
