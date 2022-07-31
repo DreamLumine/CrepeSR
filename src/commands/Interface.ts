@@ -1,6 +1,7 @@
 import { createInterface } from 'readline';
 import _alias from './alias.json';
 import Logger from '../util/Logger';
+import Session from '../server/kcp/Session';
 
 const c = new Logger("Command", "blue");
 const alias: { [key: string]: string } = _alias;
@@ -21,6 +22,8 @@ export default class Interface {
         input: process.stdin,
         output: process.stdout
     });
+
+    public static target: Session;
 
     private constructor() { }
 

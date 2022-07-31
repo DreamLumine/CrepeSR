@@ -8,6 +8,6 @@ export default async function handle(session: Session, packet: Packet) {
     session.send("SyncTimeScRsp", {
         retcode: 0,
         clientTimeMs: body.clientTimeMs,
-        serverTimeMs: Math.round(new Date().getTime() / 1000).toString()
-    } as unknown as SyncTimeScRsp);
+        serverTimeMs: Math.round(new Date().getTime() / 1000)
+    } as SyncTimeScRsp);
 }

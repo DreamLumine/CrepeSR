@@ -1,4 +1,4 @@
-import { PlayerLoginCsReq, PlayerLoginScRsp } from "../../data/proto/StarRail";
+import { PlayerBasicInfo, PlayerLoginCsReq, PlayerLoginScRsp } from "../../data/proto/StarRail";
 import Player from "../../db/Player";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
@@ -37,10 +37,12 @@ export default async function handle(session: Session, packet: Packet) {
     }
 
     session.send("PlayerLoginScRsp", {
-        basicInfo: plr!.db.basicInfo,
-        isNewPlayer: true,
+        basicInfo: plr!.db.basicInfo as PlayerBasicInfo,
+        isNewPlayer: false,
         stamina: 100,
-        curTimezone: body.clientTimeZone,
-        serverTimestampMs: Math.round(new Date().getTime() / 1000).toString(),
-    } as unknown as PlayerLoginScRsp);
+        retcode: 0,
+        isRelay: false,
+        loginRandom: Number(body.loginRandom),
+        serverTimestampMs: Math.round(new Date().getTime() / 1000),
+    } as PlayerLoginScRsp);
 }

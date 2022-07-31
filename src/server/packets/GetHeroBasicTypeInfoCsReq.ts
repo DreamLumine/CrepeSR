@@ -11,17 +11,10 @@ export default async function handle(session: Session, packet: Packet) {
         basicTypeInfoList: [{
             basicType: HeroBasicType.BoyMage,
             rank: 1,
-            skillTreeList: [{
-                level: 1,
-                pointId: 1
-            }]
+            skillTreeList: []
         }],
         curBasicType: HeroBasicType.BoyMage,
-        heroPathList: [{
-            exp: 0,
-            level: 1,
-            heroPathType: 1
-        }],
+        heroPathList: [],
         isPlayerInfoModified: false,
         isGenderModified: false
     } as GetHeroBasicTypeInfoScRsp);

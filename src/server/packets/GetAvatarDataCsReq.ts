@@ -9,22 +9,20 @@ export default async function handle(session: Session, packet: Packet) {
     const dataObj = {
         retcode: 0,
         avatarList: [{
-            
-        }],
-        isAll: false
-    } as GetAvatarDataScRsp;
-
-    Object.values(AvatarExcelTable).forEach(avatar => {
-        dataObj.avatarList.push({
-            baseAvatarId: avatar.AvatarID,
+            baseAvatarId: 1001,
             equipmentUniqueId: 13501,
             equipRelicList: [],
             exp: 0,
             level: 1,
             promotion: 1,
-            rank: 100101,
-            skilltreeList: avatar.SkillList.map(skill => ({level: 1, pointId: skill})),
-        })
+            rank: 1,
+            skilltreeList: [],
+        }],
+        isAll: body.isGetAll
+    } as GetAvatarDataScRsp;
+
+    Object.values(AvatarExcelTable).forEach(avatar => {
+        // dataObj.avatarList.push()
     });
 
     session.send("GetAvatarDataScRsp", dataObj);

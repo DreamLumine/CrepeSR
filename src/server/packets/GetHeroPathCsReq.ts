@@ -7,10 +7,6 @@ export default async function handle(session: Session, packet: Packet) {
 
     session.send("GetHeroPathScRsp", {
         retcode: 0,
-        heroPathList: [{
-            exp: 0,
-            level: 1,
-            heroPathType: 1
-        }]
+        heroPathList: []
     } as GetHeroPathScRsp);
 }

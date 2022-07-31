@@ -7,10 +7,6 @@ export default async function handle(session: Session, packet: Packet) {
 
     session.send("GetLoginActivityScRsp", {
         retcode: 0,
-        loginActivityList: [{
-            hasTakenLoginActivityRewardDaysList: [],
-            id: 1000,
-            loginDays: 1,
-        }]
+        loginActivityList: []
     } as GetLoginActivityScRsp);
 }
