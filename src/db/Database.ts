@@ -22,7 +22,7 @@ export default class Database {
         return Database.instance;
     }
 
-    public async get(collection: string, query?: {}) {
+    public async get(collection: string, query?: object) {
         try {
             const db = await Database.client.db();
             const _collection = db.collection(collection);
@@ -52,7 +52,7 @@ export default class Database {
         }
     }
 
-    public async delete(collection: string, query: {}) {
+    public async delete(collection: string, query: object) {
         try {
             const db = await Database.client.db();
             const _collection = db.collection(collection);
@@ -66,7 +66,7 @@ export default class Database {
         }
     }
 
-    public async update(collection: string, query: {}, payload: {}) {
+    public async update(collection: string, query: object, payload: object) {
         try {
             const db = await Database.client.db();
             const _collection = db.collection(collection);

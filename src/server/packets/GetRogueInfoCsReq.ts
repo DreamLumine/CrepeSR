@@ -1,10 +1,8 @@
-import { GetRogueInfoCsReq, GetRogueInfoScRsp, RogueStatus } from "../../data/proto/StarRail";
+import { GetRogueInfoScRsp, RogueStatus } from "../../data/proto/StarRail";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    const body = packet.body as GetRogueInfoCsReq;
-
     session.send("GetRogueInfoScRsp", {
         retcode: 0,
         rogueInfo: {

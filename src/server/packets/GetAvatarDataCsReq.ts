@@ -1,4 +1,4 @@
-import { ActivateFarmElementCsReq, GetAvatarDataCsReq, GetAvatarDataScRsp } from "../../data/proto/StarRail";
+import { GetAvatarDataCsReq, GetAvatarDataScRsp } from "../../data/proto/StarRail";
 import AvatarExcelTable from "../../data/excel/AvatarExcelTable.json";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
