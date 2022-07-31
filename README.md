@@ -1,2 +1,3 @@
 # CrepeSR
-SR
+
+[Discord](https://discord.gg/sCAC282C)
