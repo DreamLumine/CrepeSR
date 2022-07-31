@@ -7,8 +7,10 @@ import Interface from "./commands/Interface";
 import HttpServer from "./http/HttpServer";
 import SRServer from "./server/kcp/SRServer";
 import Logger from "./util/Logger";
-const c = new Logger("CrepeSR");
+import ProtoFactory from "./protoFactory"
 
+const c = new Logger("CrepeSR");
+ProtoFactory.init();
 c.log(`Starting CrepeSR...`);
 Interface.start();
 HttpServer.getInstance().start();

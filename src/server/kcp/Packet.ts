@@ -39,7 +39,6 @@ export default class Packet {
 
     public static encode(name: PacketName, body: {}, customCmdId?: number): Packet | null {
         try {
-            // @ts-ignore - Bullshit. You can just get enums by name
             const cmdid = CmdID[name];
             const Message = Packet.root.lookupTypeOrEnum(name);
 
@@ -73,7 +72,7 @@ export default class Packet {
 
 export type PacketName = keyof typeof CmdID;
 
-enum CmdID {
+export enum CmdID {
     None = 0,
     PlayerLoginCsReq = 1,
     PlayerLoginScRsp = 2,
