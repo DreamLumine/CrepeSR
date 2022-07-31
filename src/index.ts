@@ -7,7 +7,7 @@ import Interface from "./commands/Interface";
 import HttpServer from "./http/HttpServer";
 import SRServer from "./server/kcp/SRServer";
 import Logger from "./util/Logger";
-import ProtoFactory from "./protoFactory"
+import ProtoFactory from "./ProtoFactory"
 
 const c = new Logger("CrepeSR");
 ProtoFactory.init();
