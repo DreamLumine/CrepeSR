@@ -1,15 +1,13 @@
 //ts-proto generated types required, import them here
-import * as types from "./data/proto/StarRail";
+import * as types from "../data/proto/StarRail";
 import protobufjs from "protobufjs";
-import {CmdID, PacketName} from "./server/kcp/Packet"
-import Logger from "./util/Logger";
+import { CmdID, PacketName } from "../server/kcp/Packet"
+import Logger from "./Logger";
+const c = new Logger("ProtoFactory");
 
-
-
-var c = new Logger("ProtoFactory");
-class MessageType<T>{
-	"encode": (arg0: T) => protobufjs.Writer;
-	"fromPartial": (arg0: object) => T;
+class MessageType<T> {
+    "encode": (arg0: T) => protobufjs.Writer;
+    "fromPartial": (arg0: object) => T;
     // "decode": (input: protobufjs.Reader | Uint8Array, length?: number)=> T;
     // "fromJSON": (object: any)=>T;
     // "toJSON": (message: T)=> unknown
@@ -20,26 +18,26 @@ class MessageType<T>{
 var messageTypeMap = new Map<PacketName, MessageType<any>>();
 var messageTypeMapReversed = new Map<MessageType<any>, PacketName>();
 
-function send<Class extends MessageType<T>,T>(type: Class, data: T){
-	console.log(type.encode(data).finish())
+function send<Class extends MessageType<T>, T>(type: Class, data: T) {
+    console.log(type.encode(data).finish())
 }
 
 
 function isMessageType<T>(pet: MessageType<T> | any): pet is MessageType<T> {
     return (<MessageType<T>>pet).encode !== undefined;
- }
+}
 
 
-export default class ProtoFactory{
+export default class ProtoFactory {
 
     // ONLY USE THIS IF YOU'RE DECODING SOMETHING DONT USE IT TO SEND SHIT
     // BECAUSE THEN YOU FUCK YOUR TYPECHECKING
 
-    static getType(name: PacketName){
+    static getType(name: PacketName) {
         return messageTypeMap.get(name) as MessageType<any>;
     }
 
-    static getName(type: MessageType<any>){
+    static getName(type: MessageType<any>) {
         return messageTypeMapReversed.get(type) as PacketName;
     }
 
@@ -48,22 +46,20 @@ export default class ProtoFactory{
         for (const key of Object.keys(types)) {
             let value = types[key as keyof typeof types];
             if (isMessageType(value)) {
-                if(Object.values(CmdID).includes(key)){
+                if (Object.values(CmdID).includes(key)) {
                     messageTypeMap.set(key as PacketName, value);
                     messageTypeMapReversed.set(value, key as PacketName);
-                }else{
+                } else {
                     // there are some types that are not packets, but are still MessageType
                     // you can figure out what you want to do with them here
                 }
             }
         }
 
-        c.debug("Initialized with " + messageTypeMap.size + " types");
+        c.debug(`Initialized with " ${messageTypeMap.size} types`);
 
         //c.log(this.getName(types.PlayerLoginScRsp))
         return;
-
-    
 
         //if you want a partial type
         send(types.PlayerLoginScRsp, types.PlayerLoginScRsp.fromPartial({
