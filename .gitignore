@@ -106,4 +106,4 @@ dist
 
 # CrepeSR
 config.json
-src/data/proto
+src/data/*

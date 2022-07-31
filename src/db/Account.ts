@@ -64,6 +64,11 @@ export default class Account {
         }
         await db.delete("accounts", { _id: Number(uid) });
     }
+
+    public async save() {
+        const db = Database.getInstance();
+        await db.update("accounts", { _id: Number(this.uid) }, this);
+    }
 }
 
 function generateToken(): string {

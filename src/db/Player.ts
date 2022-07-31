@@ -63,6 +63,6 @@ export default class Player {
 
     public async save() {
         const db = Database.getInstance();
-        await db.set("players", this.db);
+        await db.update("players", { _id: this.db._id  } , this.db);
     }
 }
