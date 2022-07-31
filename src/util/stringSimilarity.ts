@@ -5,7 +5,7 @@ export function compareTwoStrings(first: string, second: string) {
     if (first === second) return 1; // identical or empty
     if (first.length < 2 || second.length < 2) return 0; // if either is a 0-letter or 1-letter string
 
-    let firstBigrams = new Map();
+    const firstBigrams = new Map();
     for (let i = 0; i < first.length - 1; i++) {
         const bigram = first.substring(i, i + 2);
         const count = firstBigrams.has(bigram)
@@ -13,7 +13,7 @@ export function compareTwoStrings(first: string, second: string) {
             : 1;
 
         firstBigrams.set(bigram, count);
-    };
+    }
 
     let intersectionSize = 0;
     for (let i = 0; i < second.length - 1; i++) {
