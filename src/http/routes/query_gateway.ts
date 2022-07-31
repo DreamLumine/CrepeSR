@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
-import protobuf from 'protobufjs';
+import protobuf, { Type } from 'protobufjs';
 import { resolve } from 'path';
 import Config from "../../util/Config";
-
-const proto = protobuf.loadSync(resolve(__dirname, '../../data/proto/QueryCurrRegionHttpRsp.proto')).lookup('QueryCurrRegionHttpRsp') as any;
+import { Gateserver } from "../../data/proto/StarRail";
 
 export default function handle(req: Request, res: Response) {
-    const dataObj = {
+    const dataObj = Gateserver.fromJSON({
         retcode: 0,
         msg: "OK",
         regionName: "CrepeSR",
-        gateserverIp: Config.GAMESERVER.SERVER_IP,
-        gateserverPort: Config.GAMESERVER.SERVER_PORT,
-    } as any;
+        ip: Config.GAMESERVER.SERVER_IP,
+        port: Config.GAMESERVER.SERVER_PORT,
+        serverDescription: "This is not BingusRail"
+    });
 
     if (Config.GAMESERVER.MAINTENANCE) {
         dataObj.retcode = 2;
@@ -23,14 +23,14 @@ export default function handle(req: Request, res: Response) {
 
     let rsp;
     try {
-        rsp = proto!.encode(dataObj).finish();
+        rsp = Gateserver.encode(dataObj).finish();
     } catch {
-        rsp = proto!.encode({
+        rsp = Gateserver.encode(Gateserver.fromJSON({
             retcode: 2,
             msg: "Internal server error",
             stopBeginTime: Date.now(),
             stopEndTime: Date.now() * 2,
-        }).finish();
+        })).finish();
     }
     res.send(Buffer.from(rsp).toString('base64'));
 }

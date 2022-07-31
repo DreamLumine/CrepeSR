@@ -6,7 +6,7 @@ const c = new Logger("Dispatch");
 // {"uid":"63884253","token":"ZQmgMdXA1StL9A3aPBUedr8yoiuoLrmV"}
 
 export default async function handle(req: Request, res: Response) {
-    const acc = await Account.getAccountByUID(req.body.uid);
+    const acc = await Account.fromUID(req.body.uid);
     const dataObj: any = {
         retcode: 0,
         message: "OK",

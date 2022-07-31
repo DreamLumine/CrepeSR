@@ -11,7 +11,7 @@ export default async function handle(command: Command) {
                 return;
             }
             try {
-                const acc = await Account.createAccount(command.args[1], command.args[2]);
+                const acc = await Account.create(command.args[1], command.args[2]);
                 c.log(`Account ${acc.name} with UID ${acc.uid} created.`);
             } catch (e) {
                 c.error(e as Error);
@@ -22,12 +22,12 @@ export default async function handle(command: Command) {
                 c.log(`Usage: account delete <uid>`);
                 return;
             }
-            const acc = await Account.getAccountByUID(command.args[1]);
+            const acc = await Account.fromUID(command.args[1]);
             if (!acc) {
                 c.error(`Account with UID ${command.args[1]} does not exist.`);
                 return;
             }
-            Account.deleteAccount(command.args[1]);
+            Account.delete(command.args[1]);
             c.log(`Account ${acc.name} with UID ${acc.uid} deleted successfully.`);
             break;
         default:

@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-message PlayerGetTokenCsReq {
-    uint32 account_type = 1;
-    string account_uid = 2; // Related to v2/login HTTP endpoint
-    string account_token = 3;
-}

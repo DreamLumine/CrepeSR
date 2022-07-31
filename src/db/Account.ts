@@ -13,21 +13,28 @@ export default class Account {
 
     }
 
-    public static async getAccountByUID(uid: string | number): Promise<Account | undefined> {
+    public static async fromUID(uid: string | number): Promise<Account | undefined> {
         const db = Database.getInstance();
         const account = await db.get("accounts", { _id: Number(uid) });
         if (!account) return;
         return new Account(Number(account._id.toString()), account.name, account.token);
     }
 
-    public static async getAccountByUsername(name: string): Promise<Account | undefined> {
+    public static async fromToken(token: string): Promise<Account | undefined> {
+        const db = Database.getInstance();
+        const account = await db.get("accounts", { token });
+        if (!account) return;
+        return new Account(Number(account._id.toString()), account.name, account.token);
+    }
+
+    public static async fromUsername(name: string): Promise<Account | undefined> {
         const db = Database.getInstance();
         const account = await db.get("accounts", { name });
         if (!account) return;
         return new Account(Number(account._id.toString()), account.name, account.token);
     }
 
-    public static async createAccount(name: string, uid?: string | number): Promise<Account> {
+    public static async create(name: string, uid?: string | number): Promise<Account> {
         const db = Database.getInstance();
         let selfAssignedUID = true;
         if (!uid) {
@@ -38,7 +45,7 @@ export default class Account {
         const account = await db.get("accounts", { uid });
         if (account) {
             if (!selfAssignedUID) {
-                return await Account.createAccount(name, uid);
+                return await Account.create(name, uid);
             } else {
                 throw new Error(`Account with uid ${uid} already exists.`);
             }
@@ -49,9 +56,9 @@ export default class Account {
         return new Account(Number(uid), name, token);
     }
 
-    public static async deleteAccount(uid: string | number): Promise<void> {
+    public static async delete(uid: string | number): Promise<void> {
         const db = Database.getInstance();
-        const account = await Account.getAccountByUID(uid);
+        const account = await Account.fromUID(uid);
         if (!account) {
             throw new Error(`Account with uid ${uid} does not exist.`);
         }

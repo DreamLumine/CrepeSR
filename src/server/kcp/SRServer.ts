@@ -33,7 +33,6 @@ export default class SRServer {
 
     private async onMessage(data: Buffer, rinfo: RemoteInfo) {
         const client = `${rinfo.address}:${rinfo.port}`;
-        c.debug(data.toString("hex"));
         if (data.byteLength == 20) {
             // Hamdshanke
             const handshake = new Handshake(data);

@@ -11,7 +11,7 @@ const c = new Logger("Dispatch");
 // }
 
 export default async function handle(req: Request, res: Response) {
-    const acc = await Account.getAccountByUsername(req.body.account);
+    const acc = await Account.fromUsername(req.body.account);
     const dataObj: any = {
         retcode: 0,
         message: "OK",

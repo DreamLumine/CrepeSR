@@ -3,23 +3,21 @@ import { RemoteInfo } from 'dgram';
 import { resolve } from 'path';
 import fs from 'fs';
 import KCP from 'node-kcp-token';
-import Packet from './Packet';
+import Packet, { PacketName } from './Packet';
 import Logger, { VerboseLevel } from '../../util/Logger';
 import defaultHandler from '../packets/PacketHandler';
+import Account from '../../db/Account';
+import Player from '../../db/Player';
 
 function r(...args: string[]) {
     return fs.readFileSync(resolve(__dirname, ...args));
 }
 
-function xor(data: Buffer, key: Buffer) {
-    const ret: Buffer = Buffer.from(data);
-    for (let i = 0; i < data.length; i++) ret.writeUInt8(data.readUInt8(i) ^ key.readUInt8(i % key.length), i);
-    return ret;
-}
-
 export default class Session {
     public key: Buffer = r('./initial.key');
     public c: Logger;
+    public account!: Account;
+    public player!: Player;
     public constructor(private readonly kcpobj: KCP.KCP, public readonly ctx: RemoteInfo) {
         this.kcpobj = kcpobj;
         this.ctx = ctx;
@@ -71,7 +69,7 @@ export default class Session {
         });
     }
 
-    public send(name: string, body: {}) {
+    public send(name: PacketName, body: {}) {
         const packet = Packet.encode(name, body);
         if (!packet) return;
         if (Logger.VERBOSE_LEVEL >= VerboseLevel.WARNS) this.c.log(packet.protoName);
