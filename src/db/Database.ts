@@ -65,4 +65,18 @@ export default class Database {
             c.error(e as Error);
         }
     }
+
+    public async update(collection: string, query: {}, payload: {}) {
+        try {
+            const db = await Database.client.db();
+            const _collection = db.collection(collection);
+            if (!(await db.listCollections({ name: collection }).toArray()).length) {
+                c.warn(`Collection ${collection} does not exist. Creating...`);
+                await _collection.createIndexes([{ key: { id: 1 }, unique: true }]);
+            }
+            return await _collection.updateOne(query, { $set: payload }, { upsert: true });
+        } catch (e) {
+            c.error(e as Error);
+        }
+    }
 }
