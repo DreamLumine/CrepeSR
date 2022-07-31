@@ -37,7 +37,7 @@ export default class Packet {
         return str.startsWith("01234567") && str.endsWith("89abcdef");
     }
 
-    public static encode(name: PacketType, body: {}, customCmdId?: number): Packet | null {
+    public static encode(name: PacketName, body: {}, customCmdId?: number): Packet | null {
         try {
             // @ts-ignore - Bullshit. You can just get enums by name
             const cmdid = CmdID[name];
