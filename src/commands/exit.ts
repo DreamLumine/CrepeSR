@@ -4,5 +4,5 @@ const c = new Logger("/exit", "blue");
 
 export default async function handle(command: Command) {
     c.log("Good riddance!");
-    process.exit(1);
+    process.exit(0);
 }
