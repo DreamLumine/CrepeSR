@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Account from "../../../../../../db/Account";
+import Config from "../../../../../../util/Config";
 import Logger from "../../../../../../util/Logger";
 const c = new Logger("Dispatch");
 
@@ -20,6 +21,14 @@ export default async function handle(req: Request, res: Response) {
         }
     }
     if (!acc) {
+        if (Config.AUTO_ACCOUNT) {
+            const account = await Account.create(req.body.account);
+            c.log(`Account ${account.name} with UID ${account.uid} auto-created.`);
+            dataObj.data.account = account;
+            res.send(dataObj);
+            return;
+        }
+
         dataObj.retcode = -202;
         dataObj.message = "Account not found";
         c.warn(`Player ${req.body.account} not found (${req.ip})`);

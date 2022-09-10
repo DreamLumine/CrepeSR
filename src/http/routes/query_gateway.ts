@@ -5,14 +5,18 @@ import Config from "../../util/Config";
 import { Gateserver } from "../../data/proto/StarRail";
 
 export default function handle(req: Request, res: Response) {
-    const dataObj = Gateserver.fromJSON({
+    const dataObj = Gateserver.fromPartial({
         retcode: 0,
         msg: "OK",
         regionName: "CrepeSR",
         ip: Config.GAMESERVER.SERVER_IP,
         port: Config.GAMESERVER.SERVER_PORT,
-        serverDescription: "This is not BingusRail"
-    });
+        serverDescription: "This is not BingusRail",
+        exResourceUrl: "https://localhost/asb/design",
+        dataUseAssetBoundle: false,
+        resUseAssetBoundle: false,
+        assetBundleUrl: "https://localhost/asb",
+    } as Gateserver);
 
     if (Config.GAMESERVER.MAINTENANCE) {
         dataObj.retcode = 2;
@@ -25,7 +29,7 @@ export default function handle(req: Request, res: Response) {
     try {
         rsp = Gateserver.encode(dataObj).finish();
     } catch {
-        rsp = Gateserver.encode(Gateserver.fromJSON({
+        rsp = Gateserver.encode(Gateserver.fromPartial({
             retcode: 2,
             msg: "Internal server error",
             stopBeginTime: Date.now(),

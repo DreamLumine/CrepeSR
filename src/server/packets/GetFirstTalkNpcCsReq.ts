@@ -1,9 +1,23 @@
-import { GetFirstTalkNpcScRsp } from "../../data/proto/StarRail";
+import { GetFirstTalkNpcCsReq, GetFirstTalkNpcScRsp, NpcMeetStatus } from "../../data/proto/StarRail";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    session.send("GetFirstTalkNpcScRsp", {
+    const body = packet.body as GetFirstTalkNpcCsReq;
+
+    const dataObj = {
         retcode: 0,
-    } as GetFirstTalkNpcScRsp);
+        npcMeetStatusList: []
+    } as GetFirstTalkNpcScRsp;
+
+    body.seriesIdList.forEach(series => {
+        const meetStatusObj = {
+            seriesId: series,
+            isMeet: false
+        } as NpcMeetStatus;
+
+        dataObj.npcMeetStatusList.push(meetStatusObj);
+    });
+
+    session.send(GetFirstTalkNpcScRsp, dataObj);
 }

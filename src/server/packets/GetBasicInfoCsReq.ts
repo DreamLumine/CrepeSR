@@ -3,7 +3,7 @@ import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    session.send("GetBasicInfoScRsp", {
+    session.send(GetBasicInfoScRsp, {
         curDay: 1,
         exchangeTimes: 0,
         retcode: 0,
