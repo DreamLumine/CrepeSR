@@ -18,7 +18,7 @@ def next_layer(nextlayer: layer.NextLayer):
         f"{nextlayer.data_client()[:70]=}\n"
     )
     sni = nextlayer.context.client.sni
-    if nextlayer.context.client.tls and sni and (sni.endswith("yuanshen.com") or sni.endswith("mihoyo.com") or sni.endswith("hoyoverse.com") or sni.endswith("starrails.com")):
+    if nextlayer.context.client.tls and sni and (sni.endswith("yuanshen.com") or sni.endswith("mihoyo.com") or sni.endswith("hoyoverse.com") or sni.endswith("starrails.com") or sni.endswith("bhsr.com")):
         ctx.log('sni:' + sni)
         nextlayer.context.server.address = ("127.0.0.1", 443)
 

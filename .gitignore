@@ -104,6 +104,10 @@ dist
 # TernJS port file
 .tern-port
 
+# VS Code
+.vscode/
+
 # CrepeSR
 config.json
 src/data/*
+banners.json

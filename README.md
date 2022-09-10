@@ -1,4 +1,3 @@
 # CrepeSR
-Fuck MHY
 
-[Discord](https://discord.gg/sCAC282C)
+[Discord](https://discord.gg/KA4HqktWYG)

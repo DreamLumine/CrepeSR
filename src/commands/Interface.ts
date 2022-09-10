@@ -23,7 +23,7 @@ export default class Interface {
         output: process.stdout
     });
 
-    public static target: Session;
+    public static target?: Session;
 
     private constructor() { }
 

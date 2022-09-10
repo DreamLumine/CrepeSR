@@ -1,24 +1,35 @@
-import { AvatarType, BattleEndStatus, GetCurBattleInfoScRsp } from "../../data/proto/StarRail";
+import { AvatarType, BattleAvatar, BattleEndStatus, GetCurBattleInfoScRsp } from "../../data/proto/StarRail";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    session.send("GetCurBattleInfoScRsp", {
+    const lineup = await session.player.getLineup();
+
+    session.send(GetCurBattleInfoScRsp, {
         retcode: 0,
-        avatarList: [{
-            avatarType: AvatarType.AVATAR_FORMAL_TYPE,
-            id: 1001,
-            level: 1,
-            rank: 1,
-            index: 1,
-            hp: 100,
-            sp: 100,
-            promotion: 1,
-        }],
-        stageId: 10000,
+        avatarList: lineup.avatarList.map(list => {
+            return {
+                avatarType: list.avatarType,
+                equipmentList: [{
+                    id: 20003,
+                    level: 1,
+                    promotion: 1,
+                    rank: 1
+                }],
+                hp: list.hp,
+                id: list.id,
+                index: list.slot,
+                level: 1,
+                promotion: 1,
+                rank: 1,
+                relicList: [],
+                skilltreeList: []
+            } as unknown as BattleAvatar;
+        }),
+        stageId: 1,
         logicRandomSeed: 2503,
         battleInfo: {},
         lastEndStatus: BattleEndStatus.BATTLE_END_WIN,
-        lastEventId: 0
+        lastEventId: 1
     } as GetCurBattleInfoScRsp);
 }

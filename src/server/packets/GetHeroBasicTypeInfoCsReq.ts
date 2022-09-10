@@ -3,15 +3,17 @@ import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    session.send("GetHeroBasicTypeInfoScRsp", {
+    let gender: Gender = (session.player.db.heroBasicType % 2 === 0) ? Gender.GenderWoman : Gender.GenderMan;
+
+    session.send(GetHeroBasicTypeInfoScRsp, {
         retcode: 0,
-        gender: Gender.GenderMan,
+        gender: gender,
         basicTypeInfoList: [{
-            basicType: HeroBasicType.BoyMage,
+            basicType: session.player.db.heroBasicType,
             rank: 1,
             skillTreeList: []
         }],
-        curBasicType: HeroBasicType.BoyMage,
+        curBasicType: session.player.db.heroBasicType,
         heroPathList: [],
         isPlayerInfoModified: false,
         isGenderModified: false

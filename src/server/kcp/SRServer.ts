@@ -40,8 +40,7 @@ export default class SRServer {
             switch (handshake.handshakeType) {
                 case HandshakeType.CONNECT:
                     c.log(`${client} connected`);
-                    const rsp = new Handshake(HandshakeType.SEND_BACK_CONV).encode();
-                    this.udpSocket.send(rsp, 0, rsp.byteLength, rinfo.port, rinfo.address);
+                    this.handshake(HandshakeType.SEND_BACK_CONV, rinfo);
                     const kcpobj = new KCP(0x69, 0x420, {
                         address: rinfo.address,
                         port: rinfo.port,
@@ -50,7 +49,7 @@ export default class SRServer {
                     kcpobj.nodelay(1, 5, 2, 0);
                     kcpobj.output((d, s, u) => this.output(d, s, u));
                     kcpobj.wndsize(256, 256);
-                    this.sessions.set(client, new Session(kcpobj, rinfo));
+                    this.sessions.set(client, new Session(kcpobj, rinfo, client));
                     break;
                 case HandshakeType.DISCONNECT:
                     c.log(`${client} disconnected`);
@@ -70,6 +69,11 @@ export default class SRServer {
     private output(buf: Buffer, size: number, ctx: { address: string, port: number, family: string }) {
         if (!buf) return;
         this.udpSocket.send(buf, 0, size, ctx.port, ctx.address);
+    }
+
+    public handshake(hType: HandshakeType, rinfo: RemoteInfo) {
+        const rsp = new Handshake(hType).encode();
+        this.udpSocket.send(rsp, 0, rsp.byteLength, rinfo.port, rinfo.address);
     }
 
     private async onError(err: Error) {
