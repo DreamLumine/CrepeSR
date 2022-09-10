@@ -7,7 +7,30 @@ export default async function handle(session: Session, packet: Packet) {
 
     const dataObj = {
         retcode: 0,
-        finishedMainMissionIdList: [],
+        finishedMainMissionIdList: [
+            1000101, 
+            1000112, 
+            1000113, 
+            1000201, 
+            1000202, 
+            1000204, 
+            1000301, 
+            1000401, 
+            1000402, 
+            1000410, 
+            1000510,
+            1000601,
+            1010301, 
+            1010302, 
+            1010401,
+            1010403, 
+            1010701,
+            1011403,
+            1010202,
+            1010902,
+            1011102,
+            4010101
+        ],
         missionEventStatusList: [],
         subMissionStatusList: [],
         unfinishedMainMissionIdList: []
@@ -19,7 +42,7 @@ export default async function handle(session: Session, packet: Packet) {
         dataObj.missionEventStatusList.push({
             id: id,
             progress: 0,
-            status: MissionStatus.MISSION_DOING
+            status: MissionStatus.MISSION_FINISH
         });
     });
 
@@ -27,9 +50,9 @@ export default async function handle(session: Session, packet: Packet) {
         dataObj.subMissionStatusList.push({
             id: id,
             progress: 0,
-            status: MissionStatus.MISSION_DOING
+            status: MissionStatus.MISSION_FINISH
         });
     });
 
-    session.send("GetMissionStatusScRsp", dataObj);
+    session.send(GetMissionStatusScRsp, dataObj);
 }

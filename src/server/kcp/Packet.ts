@@ -1,11 +1,15 @@
 import Logger, { VerboseLevel } from "../../util/Logger";
 import protobuf, { Root } from 'protobufjs';
 import { resolve } from 'path';
+import ProtoFactory from "../../util/ProtoFactory";
 const c = new Logger("Packet")
+
+
+
+
 export default class Packet {
     public readonly cmdid: number;
     public readonly data: Buffer;
-    private static root: Root = Packet.getRoot();
     public body: {} = {};
 
     public constructor(public readonly rawData: Buffer, public readonly protoName: string = "") {
@@ -15,9 +19,10 @@ export default class Packet {
         this.cmdid = this.rawData.readUInt16BE(4);
 
         this.protoName = this.protoName || CmdID[this.cmdid];
-        if (this.protoName) {
+
+        if(this.protoName){
             try {
-                const Message = Packet.root.lookupTypeOrEnum(this.protoName);
+                const Message = ProtoFactory.getType(this.protoName as PacketName);
                 this.body = Message.decode(this.data);
             } catch (e) {
                 c.warn(`Failed to decode ${this.protoName}`);
@@ -37,36 +42,17 @@ export default class Packet {
         return str.startsWith("01234567") && str.endsWith("89abcdef");
     }
 
-    public static encode(name: PacketName, body: {}, customCmdId?: number): Packet | null {
-        try {
-            const cmdid = CmdID[name];
-            const Message = Packet.root.lookupTypeOrEnum(name);
 
-            const data = Buffer.from(Message.encode(body).finish());
-            const packet = Buffer.allocUnsafe(16 + data.length);
-            packet.writeUInt32BE(0x1234567);
-            packet.writeUint16BE(customCmdId || cmdid, 4);
-            packet.writeUint16BE(0, 6);
-            packet.writeUint32BE(data.length, 8);
-            data.copy(packet, 12);
-            packet.writeUint32BE(0x89abcdef, 12 + data.length);
-
-            return new Packet(packet, name);
-        } catch (e) {
-            c.error(e as Error);
-            return null;
-        }
-    }
-
-    private static getRoot(): Root {
-        try {
-            // Combined proto file with all definitions
-            return protobuf.loadSync(resolve(__dirname, `../../data/proto/StarRail.proto`));
-        } catch (e) {
-            c.error("Failed to load proto root! Server will not be able to function properly. Please check your data/ folder.");
-            c.error(e as Error, false);
-            process.exit(1);
-        }
+    public static fromEncodedBuffer(data: Buffer, name: PacketName): Buffer {
+        const cmdid = CmdID[name];
+        const packet = Buffer.allocUnsafe(16 + data.length);
+        packet.writeUInt32BE(0x1234567);
+        packet.writeUint16BE(cmdid, 4);
+        packet.writeUint16BE(0, 6);
+        packet.writeUint32BE(data.length, 8);
+        data.copy(packet, 12);
+        packet.writeUint32BE(0x89abcdef, 12 + data.length);
+        return packet;
     }
 }
 

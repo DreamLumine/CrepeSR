@@ -8,13 +8,13 @@ export default async function handle(command: Command) {
     else {
         let level = parseInt(command.args[0]);
         if (!level) level = 0;
-        if (level > 2 || level < 0) {
-            c.log("Invalid verbose level. Must be between 0 and 2.");
+        if (level > VerboseLevel.VERBH || level < 0) {
+            c.log("Invalid verbose level. Must be between 0 and 4.");
             return;
         }
 
-        Config.VERBOSE_LEVEL = level as unknown as VerboseLevel;
-        Logger.VERBOSE_LEVEL = level as unknown as VerboseLevel;
+        Config.VERBOSE_LEVEL = level as VerboseLevel;
+        Logger.VERBOSE_LEVEL = level as VerboseLevel;
         c.log(`VerboseLevel set to ${Config.VERBOSE_LEVEL} (${VerboseLevel[level]})`);
     }
 }

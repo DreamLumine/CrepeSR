@@ -22,6 +22,7 @@ export default class HttpServer {
     private constructor() {
         this.server = express();
         this.server.use(express.json());
+        this.server.use('/asb', express.static(resolve(__dirname, './routes/asb')));
         this.server.route('/*').all((req, res) => {
             if (Logger.VERBOSE_LEVEL > VerboseLevel.WARNS) c.log(`${req.method} ${req.url}`);
             import(`./routes${req.url.split('?')[0]}`).then(async r => {

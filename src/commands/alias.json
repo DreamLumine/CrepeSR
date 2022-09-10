@@ -4,5 +4,6 @@
     "t": "target",
     "acc": "account",
     "d": "debug",
-    "?": "help"
+    "?": "help",
+    "m": "maintenance"
 }

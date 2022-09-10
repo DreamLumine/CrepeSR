@@ -3,7 +3,7 @@ import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
 
 export default async function handle(session: Session, packet: Packet) {
-    session.send("GetSpringRecoverDataScRsp", {
+    session.send(GetSpringRecoverDataScRsp, {
         retcode: 0,
         healPoolInfo: {
             healPool: 0,

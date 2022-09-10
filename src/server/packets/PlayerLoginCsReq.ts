@@ -1,4 +1,5 @@
-import { PlayerBasicInfo, PlayerLoginCsReq, PlayerLoginScRsp } from "../../data/proto/StarRail";
+import { AvatarType, ExtraLineupType, HeroBasicType, PlayerBasicInfo, PlayerLoginCsReq, PlayerLoginScRsp } from "../../data/proto/StarRail";
+import Avatar from "../../db/Avatar";
 import Player from "../../db/Player";
 import Packet from "../kcp/Packet";
 import Session from "../kcp/Session";
@@ -21,9 +22,16 @@ import Session from "../kcp/Session";
 export default async function handle(session: Session, packet: Packet) {
     const body = packet.body as PlayerLoginCsReq;
 
-    const plr = await Player.fromUID(session.player.db._id)!;
-    if (!plr!.db.basicInfo) {
-        plr!.db.basicInfo = {
+    const plr = await Player.fromUID(session, session.player.db._id);
+    if (!plr) return;
+
+    if (!plr.db.heroBasicType) {
+        plr.db.heroBasicType = HeroBasicType.BoyWarrior;
+        plr.save();
+    }
+
+    if (!plr.db.basicInfo) {
+        plr.db.basicInfo = {
             exp: 0,
             level: 1,
             hcoin: 0,
@@ -33,10 +41,49 @@ export default async function handle(session: Session, packet: Packet) {
             stamina: 100,
             worldLevel: 1,
         }
-        plr!.save();
+        plr.save();
     }
 
-    session.send("PlayerLoginScRsp", {
+    if (!plr.db.lineup) {
+        await Avatar.addAvatarToPlayer(plr, 1001);
+        //await Avatar.create(plr.db._id, 1001, 0);
+        const baseLineup = {
+            avatarList: [1001],
+            extraLineupType: ExtraLineupType.LINEUP_NONE,
+            index: 0,
+            isVirtual: false,
+            leaderSlot: 0,
+            mp: 100, // ?? Not sure what this is
+            name: "",
+            planeId: 10001
+        }
+        const LINEUPS = 6;
+        plr.db.lineup = {
+            curIndex: 0,
+            lineups: {}
+        }
+        for (let i = 0; i <= LINEUPS; i++) {
+            let copy = baseLineup;
+            copy.name = `Team ${i}`;
+            plr.db.lineup.lineups[i] = baseLineup;
+        }
+        plr.save();
+    }
+
+    if (!plr.db.posData) {
+        plr.db.posData = {
+            floorID: 10001001,
+            planeID: 10001,
+            pos: {
+                x: 0,
+                y: 439,
+                z: -45507
+            }
+        }
+        plr.save();
+    }
+
+    session.send(PlayerLoginScRsp, {
         basicInfo: plr!.db.basicInfo as PlayerBasicInfo,
         isNewPlayer: false,
         stamina: 100,
